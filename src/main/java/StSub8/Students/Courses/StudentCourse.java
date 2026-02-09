@@ -50,5 +50,4 @@ public class StudentCourse {
     this.expectedEndDate = expectedEndDate;
   }
 
-
 }

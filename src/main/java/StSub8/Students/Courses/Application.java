@@ -130,7 +130,6 @@ public class Application {
     course.setStartDate(LocalDateTime.parse(startDate));
     course.setExpectedEndDate(LocalDateTime.parse(expectedEndDate));
 
-    // 日時フォーマットを指定
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     course.setStartDate(LocalDateTime.parse(startDate, formatter));
     course.setExpectedEndDate(LocalDateTime.parse(expectedEndDate, formatter));
