@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface StudentCourseMapper {
 
-  // 全件検索
+  // コースの全件検索
   @Select("SELECT * FROM students_courses")
   List<StudentCourse> findAll();
 
