@@ -1,4 +1,4 @@
-package StSub8.Students.Courses;
+package StSub8.Students.Courses.data;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
