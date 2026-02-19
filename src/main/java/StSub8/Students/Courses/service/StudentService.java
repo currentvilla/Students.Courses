@@ -69,13 +69,4 @@ public class StudentService {
     courseMapper.deleteByStudentId(id);
     studentMapper.delete(id);
   }
-
-  /**
-   * 30代の受講生を抽出（課題用）
-   */
-  public List<Student> getStudentsInThirties() {
-    return studentMapper.findAll().stream()
-        .filter(student -> student.getAge() != null && student.getAge() >= 30 && student.getAge() < 40)
-        .collect(Collectors.toList());
-  }
 }

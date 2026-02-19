@@ -1,8 +1,14 @@
 package StSub8.Students.Courses.controller;
 
+import StSub8.Students.Courses.controller.converter.StudentConverter;
 import StSub8.Students.Courses.data.Student;
+import StSub8.Students.Courses.data.StudentCourse;
+import StSub8.Students.Courses.domain.StudentDetail;
+import StSub8.Students.Courses.service.StudentCourseService;
 import StSub8.Students.Courses.service.StudentService;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
 
   private final StudentService studentService;
+  private final StudentCourseService studentCourseService;
+  private final StudentConverter converter;
 
   @Autowired
-  public StudentController(StudentService studentService) {
+  public StudentController(StudentService studentService, StudentCourseService studentCourseService, StudentConverter converter) {
     this.studentService = studentService;
+    this.studentCourseService = studentCourseService;
+    this.converter = converter;
   }
 
   /**
    * 受講生の全件検索
    */
   @GetMapping("/students")
-  public List<Student> getAllStudents() {
-    return studentService.getAllStudents();
+  public List<StudentDetail> getAllStudents() {
+    List<Student> students = studentService.getAllStudents();
+    List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
+
+    return converter.convertStudentDetails(students, studentCourses);
   }
 
   /**
@@ -57,7 +70,8 @@ public class StudentController {
       @RequestParam String email,
       @RequestParam String area,
       @RequestParam int age,
-      @RequestParam String gender) {
+      @RequestParam String gender,
+      @RequestParam(required = false) String remark) {
 
     Student student = new Student();
     student.setId(id);
@@ -68,6 +82,7 @@ public class StudentController {
     student.setArea(area);
     student.setAge(age);
     student.setGender(gender);
+    student.setRemark(remark);
 
     studentService.registerStudent(student);
   }
@@ -84,7 +99,8 @@ public class StudentController {
       @RequestParam String email,
       @RequestParam String area,
       @RequestParam int age,
-      @RequestParam String gender) {
+      @RequestParam String gender,
+      @RequestParam(required = false) String remark) {
 
     Student student = new Student();
     student.setId(id);
@@ -95,6 +111,7 @@ public class StudentController {
     student.setArea(area);
     student.setAge(age);
     student.setGender(gender);
+    student.setRemark(remark);
 
     studentService.updateStudent(student);
   }
@@ -105,13 +122,5 @@ public class StudentController {
   @DeleteMapping("/student")
   public void deleteStudent(@RequestParam String id) {
     studentService.deleteStudent(id);
-  }
-
-  /**
-   * 30代の受講生を検索（課題用）
-   */
-  @GetMapping("/students/thirties")
-  public List<Student> getStudentsInThirties() {
-    return studentService.getStudentsInThirties();
   }
 }

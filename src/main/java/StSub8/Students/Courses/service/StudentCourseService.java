@@ -51,13 +51,4 @@ public class StudentCourseService {
   public void deleteCourse(String id) {
     courseMapper.delete(id);
   }
-
-  /**
-   * Javaコースのみを抽出（課題用）
-   */
-  public List<StudentCourse> getJavaCourses() {
-    return courseMapper.findAllCourses().stream()
-        .filter(course -> "Java".equals(course.getCourseName()))
-        .collect(Collectors.toList());
-  }
 }
