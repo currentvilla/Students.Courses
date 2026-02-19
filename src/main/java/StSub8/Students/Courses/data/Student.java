@@ -1,4 +1,4 @@
-package StSub8.Students.Courses;
+package StSub8.Students.Courses.data;
 
 import java.util.List;
 import lombok.Getter;
