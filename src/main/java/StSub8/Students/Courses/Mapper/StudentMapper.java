@@ -39,8 +39,8 @@ public interface StudentMapper {
    * 受講生の登録
     */
   @Insert(
-      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender) "
-          + "VALUES (#{id}, #{fullName}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender})")
+      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender, remark, isDeleted) "
+          + "VALUES (#{id}, #{fullName}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}), FALSE")
   void insert(Student student);
 
   /**
@@ -48,12 +48,19 @@ public interface StudentMapper {
     */
   @Update(
       "UPDATE students SET full_name = #{fullName}, furigana = #{furigana}, nickname = #{nickname}, "
-          + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender} WHERE id = #{id}")
+          + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark} "
+          + "WHERE id = #{id} AND is_deleted = FALSE")
   void update(Student student);
 
   /**
    * 受講生の削除
     */
   @Delete("DELETE FROM students WHERE id = #{id}")
+  void physicaldelete(String id);
+
+  /**
+   * 受講生の論理削除
+   */
+  @Update("UPDATE students SET is_deleted = TRUE WHERE id = #{id}")
   void delete(String id);
 }

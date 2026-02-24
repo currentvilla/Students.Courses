@@ -16,6 +16,8 @@ public class Student {
   private String area;
   private Integer age;
   private String gender;
+  private String remark;
+  private Boolean isDeleted;
 
   private List<StudentCourse> courses;
 

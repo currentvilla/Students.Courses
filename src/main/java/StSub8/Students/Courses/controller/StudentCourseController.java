@@ -89,12 +89,4 @@ public class StudentCourseController {
   public void deleteCourse(@RequestParam String id) {
     service.deleteCourse(id);
   }
-
-  /**
-   * Javaコースのみを取得（課題用）
-   */
-  @GetMapping("/courses/java")
-  public List<StudentCourse> getJavaCourses() {
-    return service.getJavaCourses();
-  }
 }
