@@ -3,21 +3,19 @@ package StSub8.Students.Courses.controller;
 import StSub8.Students.Courses.controller.converter.StudentConverter;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
-import StSub8.Students.Courses.domain.StudentDetail;
 import StSub8.Students.Courses.service.StudentCourseService;
 import StSub8.Students.Courses.service.StudentService;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class StudentController {
 
   private final StudentService studentService;
@@ -25,7 +23,8 @@ public class StudentController {
   private final StudentConverter converter;
 
   @Autowired
-  public StudentController(StudentService studentService, StudentCourseService studentCourseService, StudentConverter converter) {
+  public StudentController(StudentService studentService, StudentCourseService studentCourseService,
+      StudentConverter converter) {
     this.studentService = studentService;
     this.studentCourseService = studentCourseService;
     this.converter = converter;
@@ -35,11 +34,12 @@ public class StudentController {
    * 受講生の全件検索
    */
   @GetMapping("/students")
-  public List<StudentDetail> getAllStudents() {
+  public String getAllStudents(Model model) {
     List<Student> students = studentService.getAllStudents();
     List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
 
-    return converter.convertStudentDetails(students, studentCourses);
+    model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
+    return "studentList";
   }
 
   /**
