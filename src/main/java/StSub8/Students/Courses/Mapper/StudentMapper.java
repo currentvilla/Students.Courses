@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 
 /**
  * 受講生情報を扱う
- *
+ * <p>
  * 検索・登録・更新・削除を行う
  */
 @Mapper
@@ -31,21 +31,21 @@ public interface StudentMapper {
 
   /**
    * 名前で検索
-    */
+   */
   @Select("SELECT * FROM students WHERE full_name LIKE CONCAT('%', #{name}, '%')")
   List<Student> findByName(String name);
 
   /**
    * 受講生の登録
-    */
+   */
   @Insert(
-      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender, remark, isDeleted) "
-          + "VALUES (#{id}, #{fullName}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}), FALSE")
+      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender, remark, is_Deleted) "
+          + "VALUES (#{id}, #{fullName}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, FALSE)")
   void insert(Student student);
 
   /**
    * 受講生の更新
-    */
+   */
   @Update(
       "UPDATE students SET full_name = #{fullName}, furigana = #{furigana}, nickname = #{nickname}, "
           + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark} "
@@ -54,7 +54,7 @@ public interface StudentMapper {
 
   /**
    * 受講生の削除
-    */
+   */
   @Delete("DELETE FROM students WHERE id = #{id}")
   void physicaldelete(String id);
 
