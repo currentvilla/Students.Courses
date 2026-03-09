@@ -1,12 +1,10 @@
 package StSub8.Students.Courses.service;
 
-import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.Mapper.StudentCourseMapper;
+import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
