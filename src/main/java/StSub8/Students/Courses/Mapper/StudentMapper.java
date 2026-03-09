@@ -39,7 +39,7 @@ public interface StudentMapper {
    * 受講生の登録
    */
   @Insert(
-      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender, remark, is_Deleted) "
+      "INSERT INTO students (id, full_name, furigana, nickname, email, area, age, gender, remark, is_deleted) "
           + "VALUES (#{id}, #{fullName}, #{furigana}, #{nickname}, #{email}, #{area}, #{age}, #{gender}, #{remark}, FALSE)")
   void insert(Student student);
 
