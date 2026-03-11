@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>受講生詳細</title>
+</head>
+<body>
+<h1>受講生詳細</h1>
+
+<!-- 受講生基本情報 -->
+<h2>受講生情報</h2>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <td th:text="${studentDetail.student.id}"></td>
+  </tr>
+  <tr>
+    <th>名前</th>
+    <td th:text="${studentDetail.student.fullName}"></td>
+  </tr>
+  <tr>
+    <th>カナ名</th>
+    <td th:text="${studentDetail.student.furigana}"></td>
+  </tr>
+  <tr>
+    <th>ニックネーム</th>
+    <td th:text="${studentDetail.student.nickname}"></td>
+  </tr>
+  <tr>
+    <th>メールアドレス</th>
+    <td th:text="${studentDetail.student.email}"></td>
+  </tr>
+  <tr>
+    <th>地域</th>
+    <td th:text="${studentDetail.student.area}"></td>
+  </tr>
+  <tr>
+    <th>年齢</th>
+    <td th:text="${studentDetail.student.age}"></td>
+  </tr>
+  <tr>
+    <th>性別</th>
+    <td th:text="${studentDetail.student.gender}"></td>
+  </tr>
+  <tr>
+    <th>備考</th>
+    <td th:text="${studentDetail.student.remark}"></td>
+  </tr>
+  <tr>
+    <th>削除フラグ</th>
+    <td th:text="${studentDetail.student.isDeleted} ? '削除済み' : '有効'"></td>
+  </tr>
+</table>
+
+<!-- 受講コース情報 -->
+<h2>受講コース情報</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>コースID</th>
+    <th>コース名</th>
+    <th>開始日</th>
+    <th>終了予定日</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="course : ${studentDetail.studentCourses}">
+    <td th:text="${course.id}"></td>
+    <td th:text="${course.courseName}"></td>
+    <td th:text="${course.startDate}"></td>
+    <td th:text="${course.expectedEndDate}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- ボタン -->
+<div>
+  <a th:href="@{/students}">一覧に戻る</a>
+</div>
+
+</body>
+</html>

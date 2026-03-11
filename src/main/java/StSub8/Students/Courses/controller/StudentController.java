@@ -123,6 +123,59 @@ public class StudentController {
   }
 
   /**
+   * 受講生更新画面の表示
+   */
+  @GetMapping("/updateStudent")
+  public String updateStudentForm(@RequestParam String id, Model model) {
+    Student student = studentService.getStudentById(id);
+    List<StudentCourse> courses = studentCourseService.getCoursesByStudentId(String.valueOf(id));
+
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourses(courses);
+
+    model.addAttribute("studentDetail", studentDetail);
+    return "updateStudent";
+  }
+
+  /**
+   * 受講生情報の更新処理
+   */
+  @PostMapping("/updateStudent")
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) {
+      return "updateStudent";
+    }
+
+    studentService.updateStudent(studentDetail.getStudent());
+
+    List<StudentCourse> courses = studentDetail.getStudentCourses();
+    if (courses != null) {
+      for (StudentCourse course : courses) {
+        studentCourseService.updateCourse(course);
+      }
+    }
+
+    return "redirect:/students";
+  }
+
+  /**
+   * 受講生の詳細
+   */
+  @GetMapping("/studentDetail")
+  public String getStudentDetail(@RequestParam String id, Model model) {
+    Student student = studentService.getStudentById(id);
+    List<StudentCourse> courses = studentCourseService.getCoursesByStudentId(id);
+
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourses(courses);
+
+    model.addAttribute("studentDetail", studentDetail);
+    return "studentDetail";
+  }
+
+  /**
    * 受講生の削除
    */
   @DeleteMapping("/student")
