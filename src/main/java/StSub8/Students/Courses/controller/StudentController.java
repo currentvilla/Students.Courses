@@ -3,17 +3,22 @@ package StSub8.Students.Courses.controller;
 import StSub8.Students.Courses.controller.converter.StudentConverter;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
+import StSub8.Students.Courses.domain.StudentDetail;
 import StSub8.Students.Courses.service.StudentCourseService;
 import StSub8.Students.Courses.service.StudentService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class StudentController {
@@ -46,6 +51,7 @@ public class StudentController {
    * 受講生をIDで検索（コース情報も含む）
    */
   @GetMapping("/student")
+  @ResponseBody
   public Student getStudent(@RequestParam String id) {
     return studentService.getStudentById(id);
   }
@@ -122,5 +128,44 @@ public class StudentController {
   @DeleteMapping("/student")
   public void deleteStudent(@RequestParam String id) {
     studentService.deleteStudent(id);
+  }
+
+
+  @GetMapping("/newStudent")
+  public String newStudent(Model model) {
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(new Student());
+
+// 初期状態で1つのコース入力欄を用意
+    List<StudentCourse> courses = new ArrayList<>();
+    courses.add(new StudentCourse());
+    studentDetail.setStudentCourses(courses);
+
+    model.addAttribute("studentDetail", studentDetail);
+    return "registerStudent";
+  }
+
+  @PostMapping("/registerStudent")
+  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) {
+      return "registerStudent";
+    }
+
+    // 受講生情報を登録
+    Student student = studentDetail.getStudent();
+    student.setIsDeleted(false);
+    studentService.registerStudent(student);
+
+    // コース情報を登録
+    List<StudentCourse> courses = studentDetail.getStudentCourses();
+    if (courses != null && !courses.isEmpty()) {
+      for (StudentCourse course : courses) {
+        // 受講生IDを設定
+        course.setStudentId(student.getId());
+        studentCourseService.registerCourse(course);
+      }
+    }
+
+    return "redirect:/students";
   }
 }
