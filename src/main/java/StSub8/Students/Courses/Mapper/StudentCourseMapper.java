@@ -16,25 +16,25 @@ public interface StudentCourseMapper {
 
   /**
    * コースの全件検索
-    */
+   */
   @Select("SELECT * FROM students_courses")
   List<StudentCourse> findAllCourses();
 
   /**
    * IDでコース検索
-    */
+   */
   @Select("SELECT * FROM students_courses WHERE id = #{id}")
   StudentCourse findById(String id);
 
   /**
    * 特定の受講生のコース一覧を取得
-    */
+   */
   @Select("SELECT * FROM students_courses WHERE student_id = #{studentId} ORDER BY start_date")
   List<StudentCourse> findByStudentId(String studentId);
 
   /**
    * コースの登録
-    */
+   */
   @Insert(
       "INSERT INTO students_courses (id, student_id, course_name, start_date, expected_end_date) "
           + "VALUES (#{id}, #{studentId}, #{courseName}, #{startDate}, #{expectedEndDate})")
@@ -42,20 +42,19 @@ public interface StudentCourseMapper {
 
   /**
    * コースの更新
-    */
-  @Update("UPDATE students_courses SET course_name = #{courseName}, start_date = #{startDate}, "
-      + "expected_end_date = #{expectedEndDate} WHERE id = #{id}")
+   */
+  @Update("UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}")
   void update(StudentCourse studentCourse);
 
   /**
    * コースの削除
-    */
+   */
   @Delete("DELETE FROM students_courses WHERE id = #{id}")
   void delete(String id);
 
   /**
    * 受講生のコースを一括削除
-    */
+   */
   @Delete("DELETE FROM students_courses WHERE student_id = #{studentId}")
   void deleteByStudentId(String studentId);
 }
