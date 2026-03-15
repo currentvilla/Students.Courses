@@ -20,7 +20,7 @@ public interface StudentMapper {
    *
    * @return 受講生情報の全件検索
    */
-  @Select("SELECT * FROM students")
+  @Select("SELECT * FROM students WHERE is_deleted = FALSE")
   List<Student> findAll();
 
   /**
@@ -48,8 +48,8 @@ public interface StudentMapper {
    */
   @Update(
       "UPDATE students SET full_name = #{fullName}, furigana = #{furigana}, nickname = #{nickname}, "
-          + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark} "
-          + "WHERE id = #{id} AND is_deleted = FALSE")
+          + "email = #{email}, area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, is_deleted = #{isDeleted} "
+          + "WHERE id = #{id}")
   void update(Student student);
 
   /**
