@@ -9,7 +9,7 @@ import StSub8.Students.Courses.service.StudentService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class StudentController {
 
   private final StudentService studentService;
@@ -39,12 +41,11 @@ public class StudentController {
    * 受講生の全件検索
    */
   @GetMapping("/students")
-  public String getAllStudents(Model model) {
+  public List<StudentDetail> getAllStudents() {
     List<Student> students = studentService.getAllStudents();
     List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
 
-    model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
-    return "studentList";
+    return converter.convertStudentDetails(students, studentCourses);
   }
 
   /**
@@ -142,10 +143,7 @@ public class StudentController {
    * 受講生情報の更新処理
    */
   @PostMapping("/updateStudent")
-  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) {
-      return "updateStudent";
-    }
+  public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
 
     studentService.updateStudent(studentDetail.getStudent());
 
@@ -156,7 +154,7 @@ public class StudentController {
       }
     }
 
-    return "redirect:/students";
+    return ResponseEntity.ok("Update complete");
   }
 
   /**
