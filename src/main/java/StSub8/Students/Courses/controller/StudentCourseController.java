@@ -2,14 +2,13 @@ package StSub8.Students.Courses.controller;
 
 import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.service.StudentCourseService;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,22 +42,7 @@ public class StudentCourseController {
    * コースの登録
    */
   @PostMapping("/course")
-  public void registerCourse(
-      @RequestParam String id,
-      @RequestParam String studentId,
-      @RequestParam String courseName,
-      @RequestParam String startDate,
-      @RequestParam String expectedEndDate) {
-
-    StudentCourse course = new StudentCourse();
-    course.setId(id);
-    course.setStudentId(studentId);
-    course.setCourseName(courseName);
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-    course.setStartDate(LocalDateTime.parse(startDate, formatter));
-    course.setExpectedEndDate(LocalDateTime.parse(expectedEndDate, formatter));
-
+  public void registerCourse(@RequestBody StudentCourse course) {
     service.registerCourse(course);
   }
 
@@ -66,22 +50,10 @@ public class StudentCourseController {
    * コースの更新
    */
   @PatchMapping("/course")
-  public void updateCourse(
-      @RequestParam String id,
-      @RequestParam String courseName,
-      @RequestParam String startDate,
-      @RequestParam String expectedEndDate) {
-
-    StudentCourse course = new StudentCourse();
-    course.setId(id);
-    course.setCourseName(courseName);
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-    course.setStartDate(LocalDateTime.parse(startDate, formatter));
-    course.setExpectedEndDate(LocalDateTime.parse(expectedEndDate, formatter));
-
+  public void updateCourse(@RequestBody StudentCourse course) {
     service.updateCourse(course);
   }
+
   /**
    * コースの削除
    */
