@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StSub8.Students.Courses.Mapper.StudentCourseMapper">
+
+  <!-- 受講生コース情報の全件検索 -->
+  <select id="findAllCourses" resultType="StSub8.Students.Courses.data.StudentCourse">
+    SELECT * FROM students_courses
+  </select>
+
+  <!-- コースIDによる検索 -->
+  <select id="findById" parameterType="String"
+    resultType="StSub8.Students.Courses.data.StudentCourse">
+    SELECT * FROM students_courses WHERE id = #{id}
+  </select>
+
+  <!-- 受講生IDによる検索 -->
+  <select id="findByStudentId" parameterType="String"
+    resultType="StSub8.Students.Courses.data.StudentCourse">
+    SELECT * FROM students_courses
+    WHERE student_id = #{studentId}
+    ORDER BY start_date
+  </select>
+
+  <!-- コース情報の登録 -->
+  <insert id="insert" parameterType="StSub8.Students.Courses.data.StudentCourse">
+    INSERT INTO students_courses
+    (id, student_id, course_name, start_date, expected_end_date)
+    VALUES
+    (#{id}, #{studentId}, #{courseName}, #{startDate}, #{expectedEndDate})
+  </insert>
+
+  <!-- コース情報の更新 -->
+  <update id="update" parameterType="StSub8.Students.Courses.data.StudentCourse">
+    UPDATE students_courses
+    SET course_name = #{courseName}
+    WHERE id = #{id}
+  </update>
+
+  <!-- コース情報の削除 -->
+  <delete id="delete" parameterType="String">
+    DELETE FROM students_courses WHERE id = #{id}
+  </delete>
+
+  <!-- 受講生ごとコース情報を削除 -->
+  <delete id="deleteByStudentId" parameterType="String">
+    DELETE FROM students_courses WHERE student_id = #{studentId}
+  </delete>
+
+</mapper>
