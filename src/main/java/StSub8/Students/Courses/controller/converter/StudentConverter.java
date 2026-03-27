@@ -5,7 +5,6 @@ import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.domain.StudentDetail;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +19,7 @@ public class StudentConverter {
 
       List<StudentCourse> convertStudentCourses = studentCourses.stream()
           .filter(studentCourse -> student.getId().equals(studentCourse.getStudentId()))
-          .collect(Collectors.toList());
+          .toList();
 
       studentDetail.setStudentCourses(convertStudentCourses);
       studentDetails.add(studentDetail);
