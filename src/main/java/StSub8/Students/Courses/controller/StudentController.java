@@ -5,18 +5,19 @@ import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.domain.StudentDetail;
 import StSub8.Students.Courses.exception.GlobalExceptionHandler.ResourceNotFoundException;
-import StSub8.Students.Courses.exception.TestException;
 import StSub8.Students.Courses.service.StudentCourseService;
 import StSub8.Students.Courses.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @Validated
+@Tag(name = "受講生管理", description = "受講生の登録・検索・更新・削除")
 @RestController
 public class StudentController {
 
@@ -44,16 +47,20 @@ public class StudentController {
   /**
    * 受講生の全件検索
    */
+  @Operation(summary = "一覧検索", description = "受講生の一覧を検索します。")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "取得成功")})
   @GetMapping("/students")
-  public List<StudentDetail> getAllStudents() throws TestException {
-    throw new TestException(
-        "現在このAPIは利用できません"
-    );
+  public List<StudentDetail> getAllStudents() {
+    List<Student> students = studentService.getAllStudents();
+    List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
+    return converter.convertStudentDetails(students, studentCourses);
   }
 
   /**
    * 受講生をIDで検索
    */
+  @Operation(summary = "受講生ID検索", description = "指定したIDの受講生を1件返します。")
   @GetMapping("/student")
   public Student getStudent(@RequestParam String id) {
     Student student = studentService.getStudentById(id);
@@ -66,6 +73,7 @@ public class StudentController {
   /**
    * 受講生の登録
    */
+  @Operation(summary = "受講生登録", description = "新しい受講生とコース情報を登録します。")
   @PostMapping("/student")
   public ResponseEntity<?> registerStudent(
       @Valid @RequestBody StudentDetail studentDetail,
@@ -105,6 +113,7 @@ public class StudentController {
   /**
    * 受講生の更新
    */
+  @Operation(summary = "受講生更新", description = "指定した受講生とコース情報を更新します。")
   @PatchMapping("/student")
   public ResponseEntity<?> updateStudent(
       @Valid @RequestBody StudentDetail studentDetail,
@@ -139,6 +148,7 @@ public class StudentController {
   /**
    * 受講生の削除
    */
+  @Operation(summary = "受講生削除", description = "指定したIDの受講生を削除します。")
   @DeleteMapping("/student")
   public ResponseEntity<?> deleteStudent(@RequestParam String id) {
 
@@ -149,10 +159,4 @@ public class StudentController {
     studentService.deleteStudent(id);
     return ResponseEntity.ok().build();
   }
-
-  @ExceptionHandler(TestException.class)
-  public ResponseEntity<String> handleTestException(TestException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
-
 }
