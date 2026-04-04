@@ -4,14 +4,19 @@ import StSub8.Students.Courses.controller.converter.StudentConverter;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.domain.StudentDetail;
+import StSub8.Students.Courses.exception.GlobalExceptionHandler.ResourceNotFoundException;
+import StSub8.Students.Courses.exception.TestException;
 import StSub8.Students.Courses.service.StudentCourseService;
 import StSub8.Students.Courses.service.StudentService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 public class StudentController {
 
@@ -39,23 +45,22 @@ public class StudentController {
    * 受講生の全件検索
    */
   @GetMapping("/students")
-  public List<StudentDetail> getAllStudents() {
-    List<Student> students = studentService.getAllStudents();
-    List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
-    return converter.convertStudentDetails(students, studentCourses);
+  public List<StudentDetail> getAllStudents() throws TestException {
+    throw new TestException(
+        "現在このAPIは利用できません"
+    );
   }
 
   /**
    * 受講生をIDで検索
    */
   @GetMapping("/student")
-  public ResponseEntity<?> getStudent(@RequestParam String id) {
-
-    if (id == null || id.isBlank()) {
-      return ResponseEntity.badRequest().body("idは必須です");
+  public Student getStudent(@RequestParam String id) {
+    Student student = studentService.getStudentById(id);
+    if (student == null) {
+      throw new ResourceNotFoundException("受講生が見つかりません。ID: " + id);
     }
-
-    return ResponseEntity.ok(studentService.getStudentById(id));
+    return student;
   }
 
   /**
@@ -144,4 +149,10 @@ public class StudentController {
     studentService.deleteStudent(id);
     return ResponseEntity.ok().build();
   }
+
+  @ExceptionHandler(TestException.class)
+  public ResponseEntity<String> handleTestException(TestException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  }
+
 }
