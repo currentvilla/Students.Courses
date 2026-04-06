@@ -53,4 +53,9 @@ public class GlobalExceptionHandler {
     error.put("message", "予期しないエラーが発生しました");
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
+
+  @ExceptionHandler(TestException.class)
+  public ResponseEntity<String> handleTestException(TestException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  }
 }
