@@ -1,0 +1,94 @@
+package StSub8.Students.Courses.service;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import StSub8.Students.Courses.Mapper.StudentCourseMapper;
+import StSub8.Students.Courses.Mapper.StudentMapper;
+import StSub8.Students.Courses.data.Student;
+import StSub8.Students.Courses.data.StudentCourse;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class StudentServiceTest {
+
+  @Mock
+  private StudentMapper mapper;
+
+  @Mock
+  private StudentCourseMapper courseMapper;
+
+  private StudentService sut;
+
+  @BeforeEach
+  void before() {
+    sut = new StudentService(mapper, courseMapper);
+  }
+
+  @Test
+  void getAllStudents_returnsEmptyList() {
+    List<Student> studentList = new ArrayList<>();
+    when(mapper.findAll()).thenReturn(studentList);
+
+    sut.getAllStudents();
+
+    verify(mapper, times(1)).findAll();
+  }
+
+  @Test
+  void getStudentById_returnsStudentWithCourses() {
+    Student student = new Student();
+    student.setId("abc123");
+
+    List<StudentCourse> courses = new ArrayList<>();
+    StudentCourse course = new StudentCourse();
+    course.setStudentId("abc123");
+    courses.add(course);
+
+    when(mapper.findById("abc123")).thenReturn(student);
+    when(courseMapper.findByStudentId("abc123")).thenReturn(courses);
+
+    Student actual = sut.getStudentById("abc123");
+
+    verify(mapper, times(1)).findById("abc123");
+    verify(courseMapper, times(1)).findByStudentId("abc123");
+    Assertions.assertEquals(courses, actual.getCourses());
+  }
+
+  @Test
+  void getStudentById_returnsNullWhenNotFound() {
+    when(mapper.findById("notExist")).thenReturn(null);
+
+    Student actual = sut.getStudentById("notExist");
+
+    verify(mapper, times(1)).findById("notExist");
+    verify(courseMapper, times(0)).findByStudentId("notExist");
+    Assertions.assertNull(actual);
+  }
+
+  @Test
+  void registerStudent_callsInsert() {
+    Student student = new Student();
+
+    sut.registerStudent(student);
+
+    verify(mapper, times(1)).insert(student);
+  }
+
+  @Test
+  void updateStudent_callsUpdate() {
+    Student student = new Student();
+
+    sut.updateStudent(student);
+
+    verify(mapper, times(1)).update(student);
+  }
+}
