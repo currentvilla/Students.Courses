@@ -34,7 +34,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void getAllStudents_returnsEmptyList() {
+  void 受講生全件検索_全件検索の動作検証() {
     List<Student> studentList = new ArrayList<>();
     when(mapper.findAll()).thenReturn(studentList);
 
@@ -44,7 +44,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void getStudentById_returnsStudentWithCourses() {
+  void 受講生ID検索_コース情報の取得検証() {
     Student student = new Student();
     student.setId("abc123");
 
@@ -64,7 +64,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void getStudentById_returnsNullWhenNotFound() {
+  void 受講生ID検索_IDが異常な場合の動作検証() {
     when(mapper.findById("notExist")).thenReturn(null);
 
     Student actual = sut.getStudentById("notExist");
@@ -75,7 +75,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void registerStudent_callsInsert() {
+  void 受講生登録_登録処理の動作検証() {
     Student student = new Student();
 
     sut.registerStudent(student);
@@ -84,7 +84,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void updateStudent_callsUpdate() {
+  void 受講生更新_更新処理の動作検証() {
     Student student = new Student();
 
     sut.updateStudent(student);
