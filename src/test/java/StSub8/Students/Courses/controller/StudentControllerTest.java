@@ -138,4 +138,28 @@ class StudentControllerTest {
             }
             """));
   }
+
+  @Test
+  void searchStudents_条件検索で200が返ること() throws Exception {
+    when(studentService.searchStudents(any())).thenReturn(List.of());
+    when(converter.convertStudentDetails(any(), any())).thenReturn(List.of());
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/students/search")
+            .param("fullName", "山田")
+            .param("area", "東京"))
+        .andExpect(status().isOk());
+
+    verify(studentService, times(1)).searchStudents(any());
+  }
+
+  @Test
+  void searchStudents_条件なしで200が返ること() throws Exception {
+    when(studentService.searchStudents(any())).thenReturn(List.of());
+    when(converter.convertStudentDetails(any(), any())).thenReturn(List.of());
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/students/search"))
+        .andExpect(status().isOk());
+
+    verify(studentService, times(1)).searchStudents(any());
+  }
 }

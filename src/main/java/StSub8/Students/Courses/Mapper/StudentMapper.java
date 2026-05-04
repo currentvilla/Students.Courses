@@ -1,6 +1,7 @@
 package StSub8.Students.Courses.Mapper;
 
 import StSub8.Students.Courses.data.Student;
+import StSub8.Students.Courses.data.StudentSearchCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -41,4 +42,9 @@ public interface StudentMapper {
    * 受講生の論理削除
    */
   void delete(String id);
+
+  /**
+   * 条件で受講生を検索
+   */
+  List<Student> findByConditions(StudentSearchCriteria criteria);
 }
