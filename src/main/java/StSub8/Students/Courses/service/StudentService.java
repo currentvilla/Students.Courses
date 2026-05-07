@@ -4,6 +4,7 @@ import StSub8.Students.Courses.Mapper.StudentCourseMapper;
 import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
+import StSub8.Students.Courses.data.StudentSearchCriteria;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,5 +67,12 @@ public class StudentService {
   public void deleteStudent(String id) {
     courseMapper.deleteByStudentId(id);
     studentMapper.delete(id);
+  }
+
+  /**
+   * 条件で受講生を検索
+   */
+  public List<Student> searchStudents(StudentSearchCriteria criteria) {
+    return studentMapper.findByConditions(criteria);
   }
 }

@@ -51,4 +51,26 @@
     UPDATE students SET is_deleted = TRUE WHERE id = #{id}
   </update>
 
+  <!-- 受講生の条件指定検索 -->
+  <select id="findByConditions" resultType="StSub8.Students.Courses.data.Student">
+    SELECT DISTINCT s.*
+    FROM students s
+    LEFT JOIN students_courses sc ON s.id = sc.student_id
+    LEFT JOIN enrollment_status es ON sc.id = es.student_course_id
+    <where>
+      <if test="fullName != null and fullName != ''">
+        AND s.full_name LIKE CONCAT('%', #{fullName}, '%')
+      </if>
+      <if test="area != null and area != ''">
+        AND s.area LIKE CONCAT('%', #{area}, '%')
+      </if>
+      <if test="courseName != null and courseName != ''">
+        AND sc.course_name LIKE CONCAT('%', #{courseName}, '%')
+      </if>
+      <if test="status != null">
+        AND es.status = #{status}
+      </if>
+    </where>
+  </select>
+
 </mapper>

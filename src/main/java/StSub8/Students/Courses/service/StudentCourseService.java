@@ -1,9 +1,10 @@
 package StSub8.Students.Courses.service;
 
+import StSub8.Students.Courses.Mapper.EnrollmentStatusMapper;
 import StSub8.Students.Courses.Mapper.StudentCourseMapper;
+import StSub8.Students.Courses.data.EnrollmentStatus;
 import StSub8.Students.Courses.data.StudentCourse;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +12,25 @@ import org.springframework.stereotype.Service;
 public class StudentCourseService {
 
   private final StudentCourseMapper courseMapper;
+  private final EnrollmentStatusMapper enrollmentStatusMapper;
 
   @Autowired
-  public StudentCourseService(StudentCourseMapper courseMapper) {
+  public StudentCourseService(StudentCourseMapper courseMapper,
+      EnrollmentStatusMapper enrollmentStatusMapper) {
     this.courseMapper = courseMapper;
+    this.enrollmentStatusMapper = enrollmentStatusMapper;
   }
 
   /**
    * 全コース一覧を取得
    */
   public List<StudentCourse> getAllCourses() {
-    return courseMapper.findAllCourses();
+    List<StudentCourse> courses = courseMapper.findAllCourses();
+    courses.forEach(course -> {
+      EnrollmentStatus status = enrollmentStatusMapper.findByStudentCourseId(course.getId());
+      course.setEnrollmentStatus(status);
+    });
+    return courses;
   }
 
   /**

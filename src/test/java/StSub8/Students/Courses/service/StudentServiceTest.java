@@ -8,6 +8,7 @@ import StSub8.Students.Courses.Mapper.StudentCourseMapper;
 import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
+import StSub8.Students.Courses.data.StudentSearchCriteria;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -90,5 +91,38 @@ class StudentServiceTest {
     sut.updateStudent(student);
 
     verify(mapper, times(1)).update(student);
+  }
+
+  @Test
+  void searchStudents_条件で受講生を検索できること() {
+    StudentSearchCriteria criteria = new StudentSearchCriteria();
+    criteria.setFullName("山田");
+
+    List<Student> studentList = new ArrayList<>();
+    Student student = new Student();
+    student.setId("abc123");
+    student.setFullName("山田太郎");
+    studentList.add(student);
+
+    when(mapper.findByConditions(criteria)).thenReturn(studentList);
+
+    List<Student> actual = sut.searchStudents(criteria);
+
+    verify(mapper, times(1)).findByConditions(criteria);
+    Assertions.assertEquals(1, actual.size());
+    Assertions.assertEquals("山田太郎", actual.get(0).getFullName());
+  }
+
+  @Test
+  void searchStudents_条件に一致しない場合空のリストが返ること() {
+    StudentSearchCriteria criteria = new StudentSearchCriteria();
+    criteria.setFullName("存在しない名前");
+
+    when(mapper.findByConditions(criteria)).thenReturn(new ArrayList<>());
+
+    List<Student> actual = sut.searchStudents(criteria);
+
+    verify(mapper, times(1)).findByConditions(criteria);
+    Assertions.assertEquals(0, actual.size());
   }
 }

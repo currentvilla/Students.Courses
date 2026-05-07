@@ -31,4 +31,7 @@ public class StudentCourse {
   @NotNull(message = "終了予定日は必須です")
   @FutureOrPresent(message = "終了予定日は現在以降の日付を入力してください")
   private LocalDateTime expectedEndDate;
+
+  @Schema(description = "申込状況")
+  private EnrollmentStatus enrollmentStatus;
 }

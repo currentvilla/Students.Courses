@@ -3,6 +3,7 @@ package StSub8.Students.Courses.controller;
 import StSub8.Students.Courses.controller.converter.StudentConverter;
 import StSub8.Students.Courses.data.Student;
 import StSub8.Students.Courses.data.StudentCourse;
+import StSub8.Students.Courses.data.StudentSearchCriteria;
 import StSub8.Students.Courses.domain.StudentDetail;
 import StSub8.Students.Courses.exception.GlobalExceptionHandler.ResourceNotFoundException;
 import StSub8.Students.Courses.service.StudentCourseService;
@@ -144,7 +145,6 @@ public class StudentController {
     return ResponseEntity.ok().build();
   }
 
-
   /**
    * 受講生の削除
    */
@@ -158,5 +158,16 @@ public class StudentController {
 
     studentService.deleteStudent(id);
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   * 受講生の条件検索
+   */
+  @Operation(summary = "受講生条件検索", description = "指定した条件で受講生を検索します。")
+  @GetMapping("/students/search")
+  public List<StudentDetail> searchStudents(StudentSearchCriteria criteria) {
+    List<Student> students = studentService.searchStudents(criteria);
+    List<StudentCourse> studentCourses = studentCourseService.getAllCourses();
+    return converter.convertStudentDetails(students, studentCourses);
   }
 }
