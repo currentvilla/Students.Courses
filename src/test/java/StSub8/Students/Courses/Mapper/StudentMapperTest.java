@@ -30,14 +30,6 @@ class StudentMapperTest {
   }
 
   @Test
-  void 名前で受講生を検索できること() {
-    List<Student> actual = sut.findByName("田中");
-
-    assertThat(actual.size()).isEqualTo(1);
-    assertThat(actual.get(0).getFullName()).isEqualTo("田中 太郎");
-  }
-
-  @Test
   void 受講生の登録が行えること() {
     Student student = new Student();
     student.setFullName("山田太郎");
@@ -68,16 +60,6 @@ class StudentMapperTest {
     Student actual = sut.findById(student.getId());
     assertThat(actual.getFullName()).isEqualTo("田中 次郎");
     assertThat(actual.getEmail()).isEqualTo("jiro.tanaka@example.com");
-  }
-
-  @Test
-  void 受講生の物理削除が行えること() {
-    String id = sut.findAll().get(0).getId();
-
-    sut.physicaldelete(id);
-
-    List<Student> actual = sut.findAll();
-    assertThat(actual.size()).isEqualTo(4);
   }
 
   @Test

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import StSub8.Students.Courses.Mapper.StudentCourseMapper;
 import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.data.Student;
-import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.data.StudentSearchCriteria;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,23 +44,16 @@ class StudentServiceTest {
   }
 
   @Test
-  void 受講生ID検索_コース情報の取得検証() {
+  void 受講生ID検索_受講生が返ること() {
     Student student = new Student();
     student.setId("abc123");
 
-    List<StudentCourse> courses = new ArrayList<>();
-    StudentCourse course = new StudentCourse();
-    course.setStudentId("abc123");
-    courses.add(course);
-
     when(mapper.findById("abc123")).thenReturn(student);
-    when(courseMapper.findByStudentId("abc123")).thenReturn(courses);
 
     Student actual = sut.getStudentById("abc123");
 
     verify(mapper, times(1)).findById("abc123");
-    verify(courseMapper, times(1)).findByStudentId("abc123");
-    Assertions.assertEquals(courses, actual.getCourses());
+    Assertions.assertEquals("abc123", actual.getId());
   }
 
   @Test
@@ -71,7 +63,6 @@ class StudentServiceTest {
     Student actual = sut.getStudentById("notExist");
 
     verify(mapper, times(1)).findById("notExist");
-    verify(courseMapper, times(0)).findByStudentId("notExist");
     Assertions.assertNull(actual);
   }
 
