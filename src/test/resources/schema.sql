@@ -22,3 +22,10 @@ CREATE TABLE IF NOT EXISTS students_courses
      updated_at datetime,
      student_id int NOT NULL
 )
+
+CREATE TABLE IF NOT EXISTS enrollment_status
+(
+     id varchar(50) PRIMARY KEY,
+     student_course_id varchar(50) NOT NULL,
+     status varchar(20) NOT NULL
+)
