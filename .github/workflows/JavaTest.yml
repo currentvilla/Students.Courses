@@ -8,7 +8,7 @@ on:
 
 env:
   EC2_USER: 'ec2-user'
-  EC2_HOST: '18.179.21.45'
+  EC2_HOST: '54.250.154.98'
   SRC_PATH: 'build/libs/*.jar'
   DEST_PATH: '/home/ec2-user/Students.Courses.jar'
 
