@@ -3,7 +3,6 @@ package StSub8.Students.Courses.service;
 import StSub8.Students.Courses.Mapper.StudentCourseMapper;
 import StSub8.Students.Courses.Mapper.StudentMapper;
 import StSub8.Students.Courses.data.Student;
-import StSub8.Students.Courses.data.StudentCourse;
 import StSub8.Students.Courses.data.StudentSearchCriteria;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +31,7 @@ public class StudentService {
    * IDで受講生を検索（コース情報も含む）
    */
   public Student getStudentById(String id) {
-    Student student = studentMapper.findById(id);
-    if (student != null) {
-      List<StudentCourse> courses = courseMapper.findByStudentId(id);
-      student.setCourses(courses);
-    }
-    return student;
-  }
-
-  /**
-   * 名前で受講生を検索
-   */
-  public List<Student> searchStudentByName(String name) {
-    return studentMapper.findByName(name);
+    return studentMapper.findById(id);
   }
 
   /**

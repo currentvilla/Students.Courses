@@ -33,6 +33,17 @@ public class GlobalExceptionHandler {
   }
 
   /**
+   * 不正な引数（400）
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException e) {
+    Map<String, String> error = new HashMap<>();
+    error.put("error", "Bad Request");
+    error.put("message", e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  /**
    * DBエラー（500）
    */
   @ExceptionHandler(DataAccessException.class)
@@ -52,10 +63,5 @@ public class GlobalExceptionHandler {
     error.put("error", "Internal Server Error");
     error.put("message", "予期しないエラーが発生しました");
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-  }
-
-  @ExceptionHandler(TestException.class)
-  public ResponseEntity<String> handleTestException(TestException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
   }
 }

@@ -19,11 +19,6 @@ public interface StudentMapper {
   Student findById(String id);
 
   /**
-   * 名前で検索
-   */
-  List<Student> findByName(String name);
-
-  /**
    * 受講生の登録
    */
   void insert(Student student);
@@ -35,11 +30,6 @@ public interface StudentMapper {
 
   /**
    * 受講生の削除
-   */
-  void physicaldelete(String id);
-
-  /**
-   * 受講生の論理削除
    */
   void delete(String id);
 

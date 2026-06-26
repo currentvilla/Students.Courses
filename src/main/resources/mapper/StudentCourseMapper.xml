@@ -3,9 +3,34 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="StSub8.Students.Courses.Mapper.StudentCourseMapper">
 
-  <!-- 受講生コース情報の全件検索 -->
-  <select id="findAllCourses" resultType="StSub8.Students.Courses.data.StudentCourse">
-    SELECT * FROM students_courses
+  <!-- resultMap: courses + enrollment_status をJOINで1回取得 -->
+  <resultMap id="courseWithStatusResultMap" type="StSub8.Students.Courses.data.StudentCourse">
+    <id property="id" column="sc_id"/>
+    <result property="studentId" column="student_id"/>
+    <result property="courseName" column="course_name"/>
+    <result property="startDate" column="start_date"/>
+    <result property="expectedEndDate" column="expected_end_date"/>
+    <association property="enrollmentStatus"
+      javaType="StSub8.Students.Courses.data.EnrollmentStatus">
+      <id property="id" column="es_id"/>
+      <result property="studentCourseId" column="student_course_id"/>
+      <result property="status" column="status"/>
+    </association>
+  </resultMap>
+
+  <!-- 受講生コース情報の全件検索（enrollment_statusをJOINで同時取得） -->
+  <select id="findAllCourses" resultMap="courseWithStatusResultMap">
+    SELECT
+    sc. id AS sc_id,
+    sc.student_id,
+    sc.course_name,
+    sc.start_date,
+    sc.expected_end_date,
+    es. id AS es_id,
+    es.student_course_id,
+    es. status
+    FROM students_courses sc
+    LEFT JOIN enrollment_status es ON sc.id = es.student_course_id
   </select>
 
   <!-- コースIDによる検索 -->

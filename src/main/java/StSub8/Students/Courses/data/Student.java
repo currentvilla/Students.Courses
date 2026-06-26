@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,7 +50,5 @@ public class Student {
 
   @Schema(description = "削除フラグ", example = "false")
   private Boolean isDeleted;
-
-  private List<StudentCourse> courses;
 
 }

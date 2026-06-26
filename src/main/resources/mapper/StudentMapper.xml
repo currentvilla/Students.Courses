@@ -13,11 +13,6 @@
     SELECT * FROM students WHERE id = #{id}
   </select>
 
-  <!-- 名前で受講生を検索 -->
-  <select id="findByName" resultType="StSub8.Students.Courses.data.Student">
-    SELECT * FROM students WHERE full_name LIKE CONCAT('%', #{name}, '%')
-  </select>
-
   <!-- 受講生の登録 -->
   <insert id="insert">
     INSERT INTO students (full_name, furigana, nickname, email, area, age, gender, remark,
@@ -40,11 +35,6 @@
     is_deleted = #{isDeleted}
     WHERE id = #{id}
   </update>
-
-  <!-- 受講生の物理削除 -->
-  <delete id="physicaldelete">
-    DELETE FROM students WHERE id = #{id}
-  </delete>
 
   <!-- 受講生の論理削除 -->
   <update id="delete">

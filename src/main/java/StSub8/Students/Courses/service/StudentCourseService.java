@@ -1,8 +1,6 @@
 package StSub8.Students.Courses.service;
 
-import StSub8.Students.Courses.Mapper.EnrollmentStatusMapper;
 import StSub8.Students.Courses.Mapper.StudentCourseMapper;
-import StSub8.Students.Courses.data.EnrollmentStatus;
 import StSub8.Students.Courses.data.StudentCourse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +10,17 @@ import org.springframework.stereotype.Service;
 public class StudentCourseService {
 
   private final StudentCourseMapper courseMapper;
-  private final EnrollmentStatusMapper enrollmentStatusMapper;
 
   @Autowired
-  public StudentCourseService(StudentCourseMapper courseMapper,
-      EnrollmentStatusMapper enrollmentStatusMapper) {
+  public StudentCourseService(StudentCourseMapper courseMapper) {
     this.courseMapper = courseMapper;
-    this.enrollmentStatusMapper = enrollmentStatusMapper;
   }
 
   /**
-   * 全コース一覧を取得
+   * 全コース一覧を取得（enrollment_statusをJOINで同時取得）
    */
   public List<StudentCourse> getAllCourses() {
-    List<StudentCourse> courses = courseMapper.findAllCourses();
-    courses.forEach(course -> {
-      EnrollmentStatus status = enrollmentStatusMapper.findByStudentCourseId(course.getId());
-      course.setEnrollmentStatus(status);
-    });
-    return courses;
+    return courseMapper.findAllCourses();
   }
 
   /**
@@ -51,6 +41,9 @@ public class StudentCourseService {
    * コースの更新
    */
   public void updateCourse(StudentCourse course) {
+    if (course.getId() == null) {
+      throw new IllegalArgumentException("courseのidが必要です");
+    }
     courseMapper.update(course);
   }
 
